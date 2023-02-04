@@ -1,8 +1,6 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'microservices.book.social-multiplication' is invalid and this project uses 'microservices.book.socialmultiplication' instead.
-
 # Getting Started
 
 ### Reference Documentation
