@@ -1,4 +1,4 @@
-package microservices.book.socialmultiplication.test
+package com.spring.test
 
 import io.kotest.core.spec.style.FunSpec
 import org.springframework.test.context.ActiveProfiles
