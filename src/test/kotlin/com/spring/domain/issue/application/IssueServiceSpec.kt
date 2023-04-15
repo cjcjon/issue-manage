@@ -8,6 +8,7 @@ import com.spring.domain.issue.model.IssuePriority
 import com.spring.domain.issue.model.IssueStatus
 import com.spring.domain.issue.model.IssueType
 import com.spring.test.SpringBDDSpec
+import io.kotest.matchers.collections.shouldBeSameSizeAs
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 
 class IssueServiceSpec(repository: IssueRepository) : SpringBDDSpec({
@@ -28,12 +29,48 @@ class IssueServiceSpec(repository: IssueRepository) : SpringBDDSpec({
       // when
       val result = sut.create(params)
 
+      // then
       result shouldBe toIssueResult(toIssue(params))
+    }
+  }
+
+  feature("이슈를 조회한다") {
+    scenario("상태와 일치하는 이슈를 생성된 순서의 역순으로 전체 조회한다") {
+      // given
+      val issue1 = createIssue(summary = "summary1", status = IssueStatus.TODO)
+      val issue2 = createIssue(summary = "summary2", status = IssueStatus.IN_PROGRESS)
+      val issue3 = createIssue(summary = "summary3", status = IssueStatus.TODO)
+      val issue4 = createIssue(summary = "summary4", status = IssueStatus.RESOLVED)
+
+      repository.save(issue1)
+      repository.save(issue2)
+      repository.save(issue3)
+      repository.save(issue4)
+
+      // when
+      val result = sut.findAll(IssueStatus.TODO)
+
+      // then
+      result shouldBe listOf(toIssueResult(issue3), toIssueResult(issue1))
     }
   }
 }) {
   companion object {
-    fun toIssue(params: IssueCreateParams) = Issue(
+    private fun createIssue(
+      summary: String = "summary",
+      description: String = "description",
+      type: IssueType = IssueType.TASK,
+      priority: IssuePriority = IssuePriority.LOW,
+      status: IssueStatus = IssueStatus.TODO,
+    ) = Issue(
+      summary = summary,
+      description = description,
+      type = type,
+      priority = priority,
+      status = status,
+    )
+
+    private fun toIssue(params: IssueCreateParams) = Issue(
       summary = params.summary,
       description = params.description,
       type = params.type,
@@ -41,7 +78,7 @@ class IssueServiceSpec(repository: IssueRepository) : SpringBDDSpec({
       status = params.status,
     )
 
-    fun toIssueResult(issue: Issue) = IssueResult(
+    private fun toIssueResult(issue: Issue) = IssueResult(
       summary = issue.summary,
       description = issue.description,
       type = issue.type,
@@ -51,11 +88,18 @@ class IssueServiceSpec(repository: IssueRepository) : SpringBDDSpec({
       updatedAt = issue.updatedAt,
     )
 
-    infix fun IssueResult.shouldBe(other: IssueResult) =
+    private infix fun IssueResult.shouldBe(other: IssueResult) =
       this.shouldBeEqualToIgnoringFields(
         other,
         IssueResult::createdAt,
         IssueResult::updatedAt,
       )
+
+    private infix fun List<IssueResult>.shouldBe(other: List<IssueResult>) {
+      this.shouldBeSameSizeAs(other)
+      this.forEachIndexed { idx, issueResult ->
+        issueResult shouldBe other[idx]
+      }
+    }
   }
 }
