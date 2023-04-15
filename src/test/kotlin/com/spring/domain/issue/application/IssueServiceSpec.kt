@@ -7,10 +7,10 @@ import com.spring.domain.issue.infrastructure.IssueRepository
 import com.spring.domain.issue.model.IssuePriority
 import com.spring.domain.issue.model.IssueStatus
 import com.spring.domain.issue.model.IssueType
-import com.spring.test.SpringBDDTest
+import com.spring.test.SpringBDDSpec
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 
-class IssueServiceSpec(repository: IssueRepository) : SpringBDDTest({
+class IssueServiceSpec(repository: IssueRepository) : SpringBDDSpec({
 
   val sut = IssueService(repository)
 

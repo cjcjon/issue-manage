@@ -7,6 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 @AutoConfigureMockMvc
-abstract class SpringIntegrationBDDTest(body: FeatureSpec.() -> Unit = {}) : BaseBDDSpec(body) {
+abstract class SpringIntegrationBDDSpec(body: FeatureSpec.() -> Unit = {}) : BaseBDDSpec(body) {
   override fun extensions() = listOf(SpringExtension)
 }

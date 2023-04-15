@@ -5,6 +5,6 @@ import io.kotest.extensions.spring.SpringExtension
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
 @DataJpaTest
-class SpringBDDTest(body: FeatureSpec.() -> Unit = {}) : BaseBDDSpec(body) {
+class SpringBDDSpec(body: FeatureSpec.() -> Unit = {}) : BaseBDDSpec(body) {
   override fun extensions() = listOf(SpringExtension)
 }
