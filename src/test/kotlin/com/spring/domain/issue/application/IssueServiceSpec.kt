@@ -7,16 +7,12 @@ import com.spring.domain.issue.infrastructure.IssueRepository
 import com.spring.domain.issue.model.IssuePriority
 import com.spring.domain.issue.model.IssueStatus
 import com.spring.domain.issue.model.IssueType
-import com.spring.test.BaseBDDSpec
-import io.kotest.matchers.shouldBe
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import com.spring.test.SpringBDDTest
+import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 
-class IssueServiceSpec : BaseBDDSpec({
+class IssueServiceSpec(repository: IssueRepository) : SpringBDDTest({
 
-  val issueRepository = mockk<IssueRepository>()
-  val sut = IssueService(issueRepository)
+  val sut = IssueService(repository)
 
   feature("이슈를 생성한다") {
     scenario("사용자가 이슈 정보를 입력하면 해당 정보를 기반으로 이슈를 생성한다") {
@@ -29,13 +25,9 @@ class IssueServiceSpec : BaseBDDSpec({
         IssueStatus.TODO,
       )
 
-      every { issueRepository.save(any()) } returnsArgument 0
-
       // when
       val result = sut.create(params)
 
-      // then
-      verify(exactly = 1) { issueRepository.save(any()) }
       result shouldBe toIssueResult(toIssue(params))
     }
   }
@@ -58,5 +50,12 @@ class IssueServiceSpec : BaseBDDSpec({
       createdAt = issue.createdAt,
       updatedAt = issue.updatedAt,
     )
+
+    infix fun IssueResult.shouldBe(other: IssueResult) =
+      this.shouldBeEqualToIgnoringFields(
+        other,
+        IssueResult::createdAt,
+        IssueResult::updatedAt,
+      )
   }
 }
