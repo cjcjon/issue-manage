@@ -15,12 +15,12 @@ spring:
 
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:~/spring-db;MODE=MySQL; # embedded Mode: db 데이터 저장 위치: ~/spring-db (파일로 저장함)
+    url: jdbc:h2:file:/spring-db;MODE=MySQL; # embedded Mode: db 데이터 저장 위치: ~/spring-db (파일로 저장함)
     username: sa
     password: sa
 
   # .sql 파일 읽어들이게 설정
   sql:
     init:
-      mode: embedded
-      # schema-locations: classpath:schema.sql
+      mode: always
+      schema-locations: classpath:db/schema.sql
