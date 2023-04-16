@@ -6,6 +6,7 @@ import com.spring.domain.issue.model.IssueStatus
 import com.spring.domain.issue.presentation.model.IssueRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -50,5 +51,12 @@ class IssueController(private val issueService: IssueService) {
     val result = issueService.edit(id, request.toParams())
 
     return ResponseEntity(result, HttpStatus.OK)
+  }
+
+  @DeleteMapping("/{id}")
+  fun delete(@PathVariable id: Long): ResponseEntity<Unit> {
+    issueService.delete(id)
+
+    return ResponseEntity(Unit, HttpStatus.NO_CONTENT)
   }
 }

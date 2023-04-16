@@ -13,6 +13,8 @@ import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.inspectors.shouldForAll
 import io.kotest.matchers.collections.shouldBeSameSizeAs
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
+import io.kotest.matchers.nulls.shouldBeNull
+import org.springframework.data.repository.findByIdOrNull
 
 class IssueServiceSpec(repository: IssueRepository) : SpringBDDSpec({
 
@@ -102,6 +104,27 @@ class IssueServiceSpec(repository: IssueRepository) : SpringBDDSpec({
     scenario("존재하지 않는 이슈를 수정할경우 오류가 발생한다") {
       shouldThrowExactly<NotFoundException> {
         sut.edit(1, params)
+      }
+    }
+  }
+
+  feature("이슈를 삭제한다") {
+    scenario("아이디와 일치하는 이슈를 삭제한다") {
+      // given
+      val issue = createIssue()
+      val issueId = repository.save(issue).id!!
+
+      // when
+      sut.delete(issueId)
+
+      // then
+      val result = repository.findByIdOrNull(issueId)
+      result.shouldBeNull()
+    }
+
+    scenario("존재하지 않는 이슈를 삭제할경우 오류가 발생한다") {
+      shouldThrowExactly<NotFoundException> {
+        sut.delete(1)
       }
     }
   }

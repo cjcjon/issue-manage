@@ -25,14 +25,14 @@ class IssueService(private val issueRepository: IssueRepository) {
 
   @Transactional(readOnly = true)
   fun find(id: Long): IssueResult {
-    val issue = issueRepository.findByIdOrNull(id) ?: throw NotFoundException("이슈를 찾을 수 없습니다")
+    val issue = findIssue(id)
 
     return IssueResult.from(issue)
   }
 
   @Transactional
   fun edit(id: Long, params: IssueParams): IssueResult {
-    val issue = issueRepository.findByIdOrNull(id) ?: throw NotFoundException("이슈가 존재하지 않습니다")
+    val issue = findIssue(id)
 
     return IssueResult.from(
       issue.update(
@@ -44,4 +44,14 @@ class IssueService(private val issueRepository: IssueRepository) {
       ),
     )
   }
+
+  @Transactional
+  fun delete(id: Long) {
+    findIssue(id)
+
+    issueRepository.deleteById(id)
+  }
+
+  private fun findIssue(id: Long) =
+    issueRepository.findByIdOrNull(id) ?: throw NotFoundException("이슈가 존재하지 않습니다")
 }
