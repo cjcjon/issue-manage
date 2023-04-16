@@ -28,4 +28,12 @@ class CommentService(
     issue.writeComment(comment)
     return CommentResult.from(commentRepository.save(comment))
   }
+
+  @Transactional
+  fun edit(id: Long, userId: Long, body: String): CommentResult {
+    val comment = commentRepository.findByIdAndUserId(id, userId)?.updateBody(body)
+      ?: throw NotFoundException("코멘트를 찾을 수 없습니다")
+
+    return CommentResult.from(comment)
+  }
 }

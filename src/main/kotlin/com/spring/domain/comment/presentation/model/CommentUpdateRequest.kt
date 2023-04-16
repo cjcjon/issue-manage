@@ -1,7 +1,6 @@
 package com.spring.domain.comment.presentation.model
 
-data class CommentRequest(
+data class CommentUpdateRequest(
   val userId: Long,
-  val username: String,
   val body: String,
 )

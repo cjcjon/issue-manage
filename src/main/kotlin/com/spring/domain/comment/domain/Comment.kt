@@ -10,13 +10,28 @@ import javax.persistence.ManyToOne
 
 @Entity(name = "Comments")
 class Comment(
+  issue: Issue,
+  userId: Long,
+  username: String,
+  body: String,
+) : BaseEntity() {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "issue_id")
-  val issue: Issue,
+  val issue: Issue = issue
+
   @Column(nullable = false)
-  val userId: Long,
+  val userId: Long = userId
+
   @Column(nullable = false)
-  val username: String,
+  val username: String = username
+
   @Column(nullable = false)
-  val body: String,
-) : BaseEntity()
+  var body: String = body
+    private set
+
+  fun updateBody(body: String): Comment {
+    this.body = body
+
+    return this
+  }
+}
