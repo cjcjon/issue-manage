@@ -35,7 +35,7 @@ class IssueServiceSpec(repository: IssueRepository) : SpringBDDSpec({
     }
   }
 
-  feature("이슈를 조회한다") {
+  feature("이슈를 전체 조회한다") {
     scenario("상태와 일치하는 이슈를 생성된 순서의 역순으로 전체 조회한다") {
       // given
       val issue1 = createIssue(summary = "summary1", status = IssueStatus.TODO)
@@ -53,6 +53,20 @@ class IssueServiceSpec(repository: IssueRepository) : SpringBDDSpec({
 
       // then
       result shouldBe listOf(toIssueResult(issue3), toIssueResult(issue1))
+    }
+  }
+
+  feature("이슈를 상세 조회한다") {
+    scenario("입력된 아이디와 일치하는 이슈를 상세 조회한다") {
+      // given
+      val issue = createIssue()
+      val issueId = repository.save(issue).id!!
+
+      // when
+      val result = sut.find(issueId)
+
+      // then
+      result shouldBe toIssueResult(issue)
     }
   }
 }) {

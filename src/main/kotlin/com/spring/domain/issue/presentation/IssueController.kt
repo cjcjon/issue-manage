@@ -7,6 +7,7 @@ import com.spring.domain.issue.presentation.model.IssueCreateRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -29,6 +30,13 @@ class IssueController(private val issueService: IssueService) {
     @RequestParam(required = false, defaultValue = "TODO") status: IssueStatus,
   ): ResponseEntity<List<IssueResult>> {
     val result = issueService.findAll(status)
+
+    return ResponseEntity(result, HttpStatus.OK)
+  }
+
+  @GetMapping("/{id}")
+  fun find(@PathVariable id: Long): ResponseEntity<IssueResult> {
+    val result = issueService.find(id)
 
     return ResponseEntity(result, HttpStatus.OK)
   }
