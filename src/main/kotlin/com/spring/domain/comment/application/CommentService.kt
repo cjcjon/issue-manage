@@ -25,7 +25,7 @@ class CommentService(
       body = body,
     )
 
-    issue.comments.add(comment)
+    issue.writeComment(comment)
     return CommentResult.from(commentRepository.save(comment))
   }
 }

@@ -45,7 +45,8 @@ class Issue(
     private set
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "issue")
-  val comments: MutableList<Comment> = mutableListOf()
+  private val mutableComments: MutableList<Comment> = mutableListOf()
+  val comments: List<Comment> get() = mutableComments.toList()
 
   fun update(
     summary: String,
@@ -61,5 +62,9 @@ class Issue(
     this.status = status
 
     return this
+  }
+
+  fun writeComment(comment: Comment) {
+    mutableComments.add(comment)
   }
 }
