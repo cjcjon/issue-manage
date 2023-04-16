@@ -1,5 +1,6 @@
 package com.spring.domain.issue.domain
 
+import com.spring.domain.comment.domain.Comment
 import com.spring.domain.issue.model.IssuePriority
 import com.spring.domain.issue.model.IssueStatus
 import com.spring.domain.issue.model.IssueType
@@ -8,6 +9,8 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.FetchType
+import javax.persistence.OneToMany
 
 @Entity(name = "Issues")
 class Issue(
@@ -40,6 +43,9 @@ class Issue(
   @Enumerated(EnumType.STRING)
   var status: IssueStatus = status
     private set
+
+  @OneToMany(fetch = FetchType.EAGER, mappedBy = "issue")
+  val comments: MutableList<Comment> = mutableListOf()
 
   fun update(
     summary: String,
