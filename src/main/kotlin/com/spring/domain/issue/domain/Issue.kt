@@ -40,4 +40,20 @@ class Issue(
   @Enumerated(EnumType.STRING)
   var status: IssueStatus = status
     private set
+
+  fun update(
+    summary: String,
+    description: String,
+    type: IssueType,
+    priority: IssuePriority,
+    status: IssueStatus,
+  ): Issue {
+    this.summary = summary
+    this.description = description
+    this.type = type
+    this.priority = priority
+    this.status = status
+
+    return this
+  }
 }

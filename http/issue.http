@@ -17,3 +17,15 @@ Content-Type: application/json
 ### 상세 조회
 GET http://localhost:8080/api/v1/issues/1
 Content-Type: application/json
+
+### 수정
+PUT http://localhost:8080/api/v1/issues/1
+Content-Type: application/json
+
+{
+  "summary": "수정됨",
+  "description": "수정된 내용",
+  "type": "TASK",
+  "priority": "MEDIUM",
+  "status": "IN_PROGRESS"
+}

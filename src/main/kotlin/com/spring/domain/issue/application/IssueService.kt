@@ -1,6 +1,6 @@
 package com.spring.domain.issue.application
 
-import com.spring.domain.issue.application.model.IssueCreateParams
+import com.spring.domain.issue.application.model.IssueParams
 import com.spring.domain.issue.application.model.IssueResult
 import com.spring.domain.issue.infrastructure.IssueRepository
 import com.spring.domain.issue.model.IssueStatus
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 class IssueService(private val issueRepository: IssueRepository) {
 
   @Transactional
-  fun create(params: IssueCreateParams): IssueResult {
+  fun create(params: IssueParams): IssueResult {
     val issue = issueRepository.save(params.toIssue())
 
     return IssueResult.from(issue)
@@ -28,5 +28,20 @@ class IssueService(private val issueRepository: IssueRepository) {
     val issue = issueRepository.findByIdOrNull(id) ?: throw NotFoundException("이슈를 찾을 수 없습니다")
 
     return IssueResult.from(issue)
+  }
+
+  @Transactional
+  fun edit(id: Long, params: IssueParams): IssueResult {
+    val issue = issueRepository.findByIdOrNull(id) ?: throw NotFoundException("이슈가 존재하지 않습니다")
+
+    return IssueResult.from(
+      issue.update(
+        summary = params.summary,
+        description = params.description,
+        type = params.type,
+        priority = params.priority,
+        status = params.status,
+      ),
+    )
   }
 }

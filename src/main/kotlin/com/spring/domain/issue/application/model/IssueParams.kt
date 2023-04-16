@@ -5,7 +5,7 @@ import com.spring.domain.issue.model.IssuePriority
 import com.spring.domain.issue.model.IssueStatus
 import com.spring.domain.issue.model.IssueType
 
-data class IssueCreateParams(
+data class IssueParams(
   val summary: String,
   val description: String,
   val type: IssueType,
