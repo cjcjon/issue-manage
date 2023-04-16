@@ -8,6 +8,7 @@ import com.spring.domain.issue.model.IssuePriority
 import com.spring.domain.issue.model.IssueStatus
 import com.spring.domain.issue.model.IssueType
 import com.spring.test.SpringBDDSpec
+import io.kotest.inspectors.shouldForAll
 import io.kotest.matchers.collections.shouldBeSameSizeAs
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 
@@ -97,8 +98,8 @@ class IssueServiceSpec(repository: IssueRepository) : SpringBDDSpec({
 
     private infix fun List<IssueResult>.shouldBe(other: List<IssueResult>) {
       this.shouldBeSameSizeAs(other)
-      this.forEachIndexed { idx, issueResult ->
-        issueResult shouldBe other[idx]
+      this.zip(other).shouldForAll {
+        it.first shouldBe it.second
       }
     }
   }
